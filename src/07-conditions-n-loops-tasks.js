@@ -387,8 +387,28 @@ function getDigitalRoot(num) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  const arr = str.split('');
+  const dictionary = {
+    ']': '[',
+    ')': '(',
+    '>': '<',
+    '}': '{',
+  };
+  let res = true;
+  const openBrackets = [];
+  const regexp = /[([<{]/;
+  for (let i = 0; i < arr.length; i += 1) {
+    if (regexp.test(arr[i])) {
+      openBrackets.push(arr[i]);
+    } else {
+      res = (dictionary[arr[i]] === openBrackets.pop());
+      if (!res) {
+        break;
+      }
+    }
+  }
+  return res;
 }
 
 
@@ -412,8 +432,17 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  let currentNum = num;
+  const newNum = [];
+  while (currentNum >= n) {
+    const res = Math.floor(currentNum / n);
+    const dig = currentNum - (res * n);
+    newNum.push(dig);
+    currentNum = res;
+  }
+  newNum.push(currentNum);
+  return newNum.reverse().join('');
 }
 
 
@@ -430,6 +459,12 @@ function toNaryString(/* num, n */) {
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
 function getCommonDirectoryPath(/* pathes */) {
+  // const pattern = pathes[0];
+  // for (let i = 1; i < pathes.length; i += 1) {
+  //   pathes[i].filter((item, index) {
+  //     return item;
+  //   })
+  // }
   throw new Error('Not implemented');
 }
 
@@ -452,8 +487,25 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const l2 = m2[0].length;
+  const res = [];
+  let subRes = [];
+  let sum = 0;
+  m1.forEach((item) => {
+    for (let j = 0; j < l2; j += 1) {
+      const l1 = item.length;
+      for (let i = 0; i < l1; i += 1) {
+        sum += item[i] * m2[i][j];
+      }
+      subRes.push(sum);
+      sum = 0;
+    }
+    res.push(subRes);
+    subRes = [];
+  });
+
+  return res;
 }
 
 
@@ -487,8 +539,73 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  const l = 3;
+  let winner;
+  let res;
+  const init = 0;
+
+  for (let i = 0; i < l; i += 1) {
+    winner = position[i][init];
+    for (let j = 0; j < l; j += 1) {
+      if (position[i][j] !== winner) {
+        winner = '';
+        break;
+      }
+    }
+    if (winner) {
+      res = winner;
+      break;
+    }
+  }
+
+  if (!res) {
+    for (let i = 0; i < l; i += 1) {
+      winner = position[init][i];
+      for (let j = 0; j < l; j += 1) {
+        if (position[j][i] !== winner) {
+          winner = '';
+          break;
+        }
+      }
+      if (winner) {
+        res = winner;
+        break;
+      }
+    }
+  }
+
+  if (!res) {
+    winner = position[init][init];
+    for (let i = 0; i < l; i += 1) {
+      for (let j = 0; j < l; j += 1) {
+        if (i === j && position[i][j] !== winner) {
+          winner = '';
+          break;
+        }
+      }
+    }
+    if (winner) {
+      res = winner;
+    }
+  }
+
+  if (!res) {
+    winner = position[init][l - 1];
+    for (let i = 0; i < l; i += 1) {
+      for (let j = 0; j < l; j += 1) {
+        if (i === (l - 1 - j) && position[i][j] !== winner) {
+          winner = '';
+          break;
+        }
+      }
+    }
+    if (winner) {
+      res = winner;
+    }
+  }
+
+  return res;
 }
 
 
