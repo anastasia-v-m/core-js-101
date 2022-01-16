@@ -283,22 +283,9 @@ function getSecondItems(arr) {
  *  [ 'a', 'b', 'c', null ] => [ 'a', 'b','b', 'c','c','c',  null,null,null,null ]
  *  [ 1,2,3,4,5 ] => [ 1, 2,2, 3,3,3, 4,4,4,4, 5,5,5,5,5 ]
  */
-function propagateItemsByPositionIndex(/* arr */) {
-  // const newArr = arr.map((item, index) => {
-  //   let j = 0;
-  //   const innerArr = [];
-  //   while (j <= index) {
-  //     innerArr.push(item);
-  //     j += 1;
-  //   }
-  //   return innerArr;
-  // });
-
-  // const arr2 = newArr.reduce((new2, item) => {
-  //   new2.concat(item);
-  // }, []);
-  // return arr2;
-  throw new Error('Not implemented');
+function propagateItemsByPositionIndex(arr) {
+  const arr2 = arr.reduce((prev, item, index) => prev.concat(Array(index + 1).fill(item)), []);
+  return arr2;
 }
 
 
@@ -610,8 +597,25 @@ function distinct(arr) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(/* array, keySelector, valueSelector */) {
-  throw new Error('Not implemented');
+function group(array, keySelector, valueSelector) {
+  const map = new Map();
+  array.reduce((prev, item) => {
+    const str = [];
+    const key = keySelector(item);
+    const val = valueSelector(item);
+
+    if (prev.has(key)) {
+      const vals = prev.get(key);
+      vals.push(val);
+      prev.set(key, vals);
+    } else {
+      str.push(val);
+      prev.set(key, str);
+    }
+
+    return prev;
+  }, map);
+  return map;
 }
 
 
@@ -632,13 +636,9 @@ function selectMany(arr, childrenSelector) {
   let result = [];
 
   function re(item0) {
-    const item = item0;
-    if (Array.isArray(item)) {
-      item.map(re);
-    } else {
-      result = result.concat(childrenSelector(item0));
-    }
-    return item0;
+    const item = childrenSelector(item0);
+    result = result.concat(item);
+    return item;
   }
 
   arr.map(re);

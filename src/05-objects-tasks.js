@@ -160,14 +160,27 @@ const cssSelectorBuilder = {
   },
 
   combine(selector1, combinator, selector2) {
-    // const bld1 = cssSelectorBuilder;
-    // const st1 = bld1.stringify
-    return `${selector1} ${combinator} ${selector2}`;
+    this.arr.push(selector1.stringify());
+    this.arr.push(` ${combinator} `);
+    this.arr.push(selector2.stringify());
+    return this;
+  },
+
+  clearStorage() {
+    this.storage.elem = '';
+    this.storage.iD = '';
+    this.storage.cl = '';
+    this.storage.at = '';
+    this.storage.psCl = '';
+    this.storage.psEl = '';
   },
 
   stringify() {
-    return this.storage.elem + this.storage.iD + this.storage.cl
+    const result = this.storage.elem + this.storage.iD + this.storage.cl
       + this.storage.at + this.storage.psCl + this.storage.psEl;
+    this.clearStorage();
+    this.arr = [];
+    return result;
   },
 };
 
